@@ -1,22 +1,8 @@
-#!/usr/bin/env python
-# coding: utf-8
-
-# # Chat
-#
-# Recall the overall workflow for retrieval augmented generation (RAG):
-
-# ![overview.jpeg](attachment:overview.jpeg)
-
-# We discussed `Document Loading` and `Splitting` as well as `Storage` and `Retrieval`.
-#
-# We then showed how `Retrieval` can be used for output generation in Q+A using `RetrievalQA` chain.
-
-# In[6]:
-
 
 import os
 import openai
 import sys
+import datetime
 
 sys.path.append("../..")
 
@@ -29,15 +15,6 @@ from dotenv import load_dotenv, find_dotenv
 _ = load_dotenv(find_dotenv())  # read local .env file
 
 openai.api_key = os.environ["OPENAI_API_KEY"]
-
-
-# The code below was added to assign the openai LLM version filmed until it is deprecated, currently in Sept 2023.
-# LLM responses can often vary, but the responses may be significantly different when using a different model version.
-
-# In[7]:
-
-
-import datetime
 
 current_date = datetime.datetime.now().date()
 if current_date < datetime.date(2023, 9, 2):
@@ -52,8 +29,6 @@ print(llm_name)
 #  * Go to [langchain plus platform](https://www.langchain.plus/) and sign up
 #  * Create an api key from your account's settings
 #  * Use this api key in the code below
-
-# In[8]:
 
 
 # import os
@@ -75,16 +50,11 @@ docs = vectordb.similarity_search(question, k=3)
 len(docs)
 
 
-# In[11]:
-
-
 from langchain.chat_models import ChatOpenAI
 
 llm = ChatOpenAI(model_name=llm_name, temperature=0)
 llm.predict("Hello world!")
 
-
-# In[12]:
 
 
 # Build prompt
@@ -117,17 +87,12 @@ result["result"]
 
 # ### Memory
 
-# In[13]:
-
-
 from langchain.memory import ConversationBufferMemory
 
 memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
 
 
 # ### ConversationalRetrievalChain
-
-# In[14]:
 
 
 from langchain.chains import ConversationalRetrievalChain
@@ -136,35 +101,28 @@ retriever = vectordb.as_retriever()
 qa = ConversationalRetrievalChain.from_llm(llm, retriever=retriever, memory=memory)
 
 
-# In[15]:
+# # In[15]:
 
 
-question = "Is probability a class topic?"
-result = qa({"question": question})
+# question = "Is probability a class topic?"
+# result = qa({"question": question})
 
 
-# In[16]:
+
+# result["answer"]
 
 
-result["answer"]
+# # In[17]:
 
 
-# In[17]:
+# question = "why are those prerequesites needed?"
+# result = qa({"question": question})
 
 
-question = "why are those prerequesites needed?"
-result = qa({"question": question})
+
+# result["answer"]
 
 
-# In[18]:
-
-
-result["answer"]
-
-
-# # Create a chatbot that works on your documents
-
-# In[19]:
 
 
 from langchain.embeddings.openai import OpenAIEmbeddings
@@ -226,7 +184,7 @@ class cbfs(param.Parameterized):
     def __init__(self, **params):
         super(cbfs, self).__init__(**params)
         self.panels = []
-        self.loaded_file = "docs/cs229_lectures/MachineLearning-Lecture01.pdf"
+        self.loaded_file = "lm741.pdf"
         self.qa = load_db(self.loaded_file, "stuff", 4)
 
     def call_load_db(self, count):
@@ -327,8 +285,6 @@ class cbfs(param.Parameterized):
 
 # ### Create a chatbot
 
-# In[22]:
-
 
 cb = cbfs()
 
@@ -341,7 +297,7 @@ inp = pn.widgets.TextInput(placeholder="Enter text here…")
 bound_button_load = pn.bind(cb.call_load_db, button_load.param.clicks)
 conversation = pn.bind(cb.convchain, inp)
 
-jpg_pane = pn.pane.Image("./img/convchain.jpg")
+jpg_pane = pn.pane.Image("img.jpg")
 
 tab1 = pn.Column(
     pn.Row(inp),
@@ -376,7 +332,7 @@ dashboard = pn.Column(
         ("Configure", tab4),
     ),
 )
-dashboard.show()
+dashboard
 
 
 # Feel free to copy this code and modify it to add your own features. You can try alternate memory and retriever models by changing the configuration in `load_db` function and the `convchain` method. [Panel](https://panel.holoviz.org/) and [Param](https://param.holoviz.org/) have many useful features and widgets you can use to extend the GUI.
