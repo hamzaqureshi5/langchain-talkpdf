@@ -18,6 +18,7 @@ env/
 
 # Ignore database files
 *.sqlite
+docs/*.sqlite
 
 # Ignore system-specific files
 .DS_Store
