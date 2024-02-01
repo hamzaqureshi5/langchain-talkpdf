@@ -2,6 +2,7 @@
 *.env
 .conda
 
+docs
 
 # Ignore compiled Python files
 __pycache__/
