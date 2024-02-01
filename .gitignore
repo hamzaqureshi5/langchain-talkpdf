@@ -1,0 +1,27 @@
+.env
+*.env
+.conda
+
+
+# Ignore compiled Python files
+__pycache__/
+*.pyc
+
+# Ignore virtual environments
+venv/
+env/
+
+# Ignore logs and temporary files
+*.log
+*.tmp
+
+# Ignore database files
+*.sqlite
+
+# Ignore system-specific files
+.DS_Store
+Thumbs.db
+
+# Ignore IDE-specific files
+.idea/
+.vscode/
